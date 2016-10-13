@@ -35,10 +35,11 @@ void fq_remove(char *filename)
 {
     struct list_head *p = &fq_list;
 
+    if (list_empty(&fq_list)) {
+        return ;
+    }
+
     while (p) {
-        if (p == &fq_list) {
-            break;
-        }
         struct fq_item *q = container_of(p, struct fq_item, list);
         if (!strcmp(q->obj.name, filename)) {
             list_del(p);
@@ -46,6 +47,9 @@ void fq_remove(char *filename)
             return ;
         }
         p = p->next;
+        if (p == &fq_list) {
+            break;
+        }
     }
 }
 
@@ -92,9 +96,9 @@ struct file_object *fq_get(char *filename)
 
 void fq_flush(void)
 {
-    struct list_head *p;
+    struct list_head *p, *tmp;
 
-    list_for_each(p, &fq_list) {
+    list_for_each_safe(p, tmp, &fq_list) {
         struct fq_item *q = container_of(p, struct fq_item, list);
         list_del(p);
         free(q);
@@ -113,7 +117,6 @@ struct file_object *fq_first(int type)
     do {
         struct fq_item *q = container_of(iterator, struct fq_item, list);
         if (q->obj.type == type || q->obj.type == -1) {
-            D();
             return &q->obj;
         }
         iterator = iterator->next;
@@ -122,7 +125,6 @@ struct file_object *fq_first(int type)
         }
     } while (iterator);
 
-    D();
     return NULL;
 }
 
