@@ -13,7 +13,7 @@ target:	ufqd
 %.o: %.cxx
 	@$(CXX) $(CFLAGS) -c $< -o $@
 
-ufqd: ufqd.o log.o
+ufqd: ufqd.o log.o filequeue.o
 	$(CC) $(LDFLAGS) $^ -o $@
 
 clean:
