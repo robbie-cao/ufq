@@ -6,6 +6,8 @@ enum {
     ATTR_READ,
 };
 
+#define ATTR_ALL    (-1)
+
 struct file_object {
     int id;
     char name[32];      // TODO: extend constant length to be variable

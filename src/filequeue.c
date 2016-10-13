@@ -106,31 +106,43 @@ struct file_object *fq_first(int type)
 {
     iterator = &fq_list;
 
-    while (iterator) {
-        if (iterator == &fq_list) {
-            break;
-        }
+    if (list_empty(&fq_list)) {
+        return NULL;
+    }
+
+    do {
         struct fq_item *q = container_of(iterator, struct fq_item, list);
-        if (q->obj.type == type) {
+        if (q->obj.type == type || q->obj.type == -1) {
+            D();
             return &q->obj;
         }
         iterator = iterator->next;
-    }
+        if (iterator == &fq_list) {
+            break;
+        }
+    } while (iterator);
+
+    D();
     return NULL;
 }
 
 struct file_object *fq_next(int type)
 {
-    while (iterator) {
+    if (list_empty(&fq_list)) {
+        return NULL;
+    }
+
+    do {
+        iterator = iterator->next;
         if (iterator == &fq_list) {
             break;
         }
         struct fq_item *q = container_of(iterator, struct fq_item, list);
-        if (q->obj.type == type) {
+        if (q->obj.type == type || q->obj.type == -1) {
             return &q->obj;
         }
-        iterator = iterator->next;
-    }
+    } while (iterator);
+
     return NULL;
 }
 
