@@ -8,6 +8,7 @@
 #include <libubox/list.h>
 
 #include "filequeue.h"
+#include "log.h"
 
 static struct list_head fq_list;
 static struct list_head *iterator = NULL;
@@ -25,7 +26,7 @@ struct file_object *fq_add(char *filename)
     item->obj.type = ATTR_UNREAD;
     srand(time(NULL));
     item->obj.id = rand();
-    list_add(&item->list, &fq_list);
+    list_add_tail(&item->list, &fq_list);
 
     return &item->obj;
 }
@@ -35,6 +36,9 @@ void fq_remove(char *filename)
     struct list_head *p = &fq_list;
 
     while (p) {
+        if (p == &fq_list) {
+            break;
+        }
         struct fq_item *q = container_of(p, struct fq_item, list);
         if (!strcmp(q->obj.name, filename)) {
             list_del(p);
@@ -49,6 +53,10 @@ struct file_object *fq_retrieve(void)
 {
     struct list_head *p = &fq_list;
 
+    if (list_empty(&fq_list)) {
+        return NULL;
+    }
+
     while (p) {
         struct fq_item *q = container_of(p, struct fq_item, list);
         if (q->obj.type == ATTR_UNREAD) {
@@ -57,6 +65,9 @@ struct file_object *fq_retrieve(void)
             return &q->obj;
         }
         p = p->next;
+        if (p == &fq_list) {
+            break;
+        }
     }
 
     return NULL;
@@ -67,6 +78,9 @@ struct file_object *fq_get(char *filename)
     struct list_head *p = &fq_list;
 
     while (p) {
+        if (p == &fq_list) {
+            break;
+        }
         struct fq_item *q = container_of(p, struct fq_item, list);
         if (!strcmp(q->obj.name, filename)) {
             return &q->obj;
@@ -93,6 +107,9 @@ struct file_object *fq_first(int type)
     iterator = &fq_list;
 
     while (iterator) {
+        if (iterator == &fq_list) {
+            break;
+        }
         struct fq_item *q = container_of(iterator, struct fq_item, list);
         if (q->obj.type == type) {
             return &q->obj;
@@ -105,6 +122,9 @@ struct file_object *fq_first(int type)
 struct file_object *fq_next(int type)
 {
     while (iterator) {
+        if (iterator == &fq_list) {
+            break;
+        }
         struct fq_item *q = container_of(iterator, struct fq_item, list);
         if (q->obj.type == type) {
             return &q->obj;
@@ -127,7 +147,7 @@ int fq_count(int type)
 
     list_for_each(p, &fq_list) {
         struct fq_item *q = container_of(p, struct fq_item, list);
-        if (q->obj.type == type) {
+        if (q->obj.type == type || q->obj.type == -1) {
             count++;
         }
     }
