@@ -61,7 +61,7 @@ static int ufqd_add(struct ubus_context *ctx, struct ubus_object *obj,
                 blobmsg_add_string(&b, "result", "success");
                 blobmsg_add_u32(&b, "id", fo->id);
                 blobmsg_add_string(&b, "name", fo->name);
-                blobmsg_add_string(&b, "type", fo->type);
+                blobmsg_add_u16(&b, "type", fo->type);
         } else {
                 blobmsg_add_string(&b, "result", "fail");
         }
@@ -82,7 +82,7 @@ ufqd_retrieve(struct ubus_context *ctx, struct ubus_object *obj,
                 blobmsg_add_string(&b, "result", "success");
                 blobmsg_add_u32(&b, "id", fo->id);
                 blobmsg_add_string(&b, "name", fo->name);
-                blobmsg_add_string(&b, "type", fo->type);
+                blobmsg_add_u16(&b, "type", fo->type);
         } else {
                 blobmsg_add_string(&b, "result", "null");
         }
