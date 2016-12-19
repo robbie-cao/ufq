@@ -2,7 +2,7 @@ all: target
 FORCE: ;
 .PHONY: FORCE
 
-target:	ufqd
+target:	ufqd ufs
 
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
@@ -14,7 +14,10 @@ target:	ufqd
 	@$(CXX) $(CFLAGS) -c $< -o $@
 
 ufqd: ufqd.o log.o filequeue.o
-	$(CC) $(LDFLAGS) $^ -o $@
+	$(CC) $^ $(LDFLAGS) -o $@
+
+ufs: ufs.o log.o
+	$(CC) $^ $(LDFLAGS) -o $@
 
 clean:
 	rm -f *.o $(target)
