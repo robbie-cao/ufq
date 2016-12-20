@@ -11,11 +11,11 @@ define Package/ufqd
 	CATEGORY:=Utilities
 	DEFAULT:=y
 	TITLE:=File Queue Daemon
-	DEPENDS:=+ubusd +ubus +ubox +libubus +libubox +libblobmsg-json +libpthread
+	DEPENDS:=+ubusd +ubus +ubox +libubus +libubox +libblobmsg-json +libpthread +libcurl
 endef
 
 TARGET_CFLAGS += -Wall
-EXTRA_LDFLAGS += -lubus -lubox -lblobmsg_json -lpthread
+EXTRA_LDFLAGS += -lubus -lubox -lblobmsg_json -lpthread -lcurl
 
 define Build/Prepare
 	$(Build/Prepare/Default)
