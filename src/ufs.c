@@ -308,7 +308,7 @@ static int ufs_upload(struct ubus_context *ctx, struct ubus_object *obj,
     strncpy(item->data, url, BUFFER_SIZE);
     LOGD(LOG_TAG, "Add to ul queue - item: %s\n", item->data);
     pthread_mutex_lock(&mutex_upload);
-    TAILQ_INSERT_TAIL(&head_dq, item, entries);
+    TAILQ_INSERT_TAIL(&head_uq, item, entries);
     pthread_cond_signal(&cv_upload);
     pthread_mutex_unlock(&mutex_upload);
 
