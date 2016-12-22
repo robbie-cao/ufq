@@ -11,11 +11,11 @@ define Package/ufqd
 	CATEGORY:=Utilities
 	DEFAULT:=y
 	TITLE:=File Queue Daemon
-	DEPENDS:=+ubusd +ubus +ubox +libubus +libubox +libblobmsg-json +libpthread +libcurl
+	DEPENDS:=+ubusd +ubus +ubox +libubus +libubox +libblobmsg-json +libpthread +libcurl +libsqlite3
 endef
 
 TARGET_CFLAGS += -Wall
-EXTRA_LDFLAGS += -lubus -lubox -lblobmsg_json -lpthread -lcurl
+EXTRA_LDFLAGS += -lubus -lubox -lblobmsg_json -lpthread -lcurl -lsqlite3
 
 define Build/Prepare
 	$(Build/Prepare/Default)
@@ -26,6 +26,7 @@ define Package/ufqd/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ufqd $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ufs $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ufs2 $(1)/usr/bin
 endef
 
 $(eval $(call BuildPackage,ufqd))
