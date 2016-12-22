@@ -118,6 +118,7 @@ int file_upload(char *file_path)
     struct curl_httppost* post = NULL;
     struct curl_httppost* last = NULL;
 
+    D();
     curl_formadd(&post, &last, CURLFORM_COPYNAME, "filename", CURLFORM_FILE, file_path, CURLFORM_END);
 
     /* upload to this place */
@@ -143,12 +144,14 @@ int file_upload(char *file_path)
     /* enable verbose for easier tracing */
     curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
+#if 0
     curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, xferinfo);
     /* pass the struct pointer into the xferinfo function, note that this is
        an alias to CURLOPT_PROGRESSDATA */
     curl_easy_setopt(curl, CURLOPT_XFERINFODATA, &prog);
 
     curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
+#endif
 
     res = curl_easy_perform(curl);
 
